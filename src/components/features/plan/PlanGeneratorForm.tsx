@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useEffect } from 'react';
@@ -151,3 +152,8 @@ const PlanGeneratorForm: React.FC<PlanGeneratorFormProps> = ({ onSubmit, isLoadi
           </Button>
         </CardFooter>
       </form>
+    </Form>
+  );
+};
+
+export default PlanGeneratorForm;

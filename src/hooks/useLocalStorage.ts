@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 
 function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((val: T) => T)) => void] {
@@ -35,3 +36,9 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T | ((val
         console.error(`Error setting localStorage key “${key}”:`, error);
       }
     }
+  }, [key, storedValue]);
+
+  return [storedValue, setStoredValue];
+}
+
+export default useLocalStorage;

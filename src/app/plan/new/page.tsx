@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -67,7 +68,7 @@ export default function NewPlanPage() {
           updatedAt: currentDate,
         };
 
-        setPlans([...plans, newBusinessPlan]);
+        setPlans([...(plans || []), newBusinessPlan]); // Ensure plans is not null
         toast({ title: "Success!", description: "Your new business plan has been generated." });
         router.push(`/plan/${newPlanId}`);
       } else {
@@ -108,3 +109,8 @@ export default function NewPlanPage() {
       <footer className="border-t bg-card py-6 text-center mt-auto">
         <p className="text-sm text-muted-foreground">
           &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
+        </p>
+      </footer>
+    </div>
+  );
+}

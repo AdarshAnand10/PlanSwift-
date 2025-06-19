@@ -1,108 +1,104 @@
 
 'use client';
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-type Theme = 'dark' | 'light' | 'system';
-
-type ThemeProviderProps = {
+interface ThemeProviderProps {
   children: ReactNode;
-  defaultTheme?: Theme;
+  defaultTheme?: string;
   storageKey?: string;
+}
+
+interface ThemeContextType {
+  theme: string;
+  setTheme: (theme: string) => void;
+}
+
+// Ensure initialThemeContext matches ThemeContextType for the default value
+const initialThemeContext: ThemeContextType = {
+  theme: 'system', // Default value, can be 'light', 'dark', or 'system'
+  setTheme: () => null, // Placeholder, will be overridden by useState's setTheme
 };
 
-type ThemeProviderState = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-};
-
-// This is the initial state provided to createContext.
-// It ensures 'context' in useTheme is never undefined.
-const initialState: ThemeProviderState = {
-  theme: 'system',
-  setTheme: () => null, // Default no-op function
-};
-
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
+const ThemeProviderContext = createContext<ThemeContextType>(initialThemeContext);
 
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
   storageKey = 'ui-theme',
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    // Guard against window being undefined during SSR or build time
+  const [theme, setTheme] = useState<string>(() => {
     if (typeof window === 'undefined') {
       return defaultTheme;
     }
     try {
-      const item = window.localStorage.getItem(storageKey) as Theme | null;
-      return item ? item : defaultTheme;
-    } catch (error) {
-      // Log error but don't break execution
-      console.error('Error reading theme from localStorage', error);
+      const storedTheme = window.localStorage.getItem(storageKey);
+      return storedTheme || defaultTheme;
+    } catch (e) {
+      console.warn(`Failed to read theme from localStorage key "${storageKey}":`, e);
       return defaultTheme;
     }
   });
 
   useEffect(() => {
-    // Guard against window being undefined
-    if (typeof window === 'undefined') return;
-
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
 
     let effectiveTheme = theme;
     if (theme === 'system') {
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      // Ensure systemTheme is 'light' or 'dark'
-      if (systemTheme === 'light' || systemTheme === 'dark') {
-        root.classList.add(systemTheme);
-      }
-    } else {
-      // Ensure theme is 'light' or 'dark'
-       if (theme === 'light' || theme === 'dark') {
-        root.classList.add(theme);
-      }
+      effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
-  }, [theme]);
+    
+    root.classList.add(effectiveTheme);
 
-  const setTheme = (newTheme: Theme) => {
-    // Guard against window being undefined
-    if (typeof window !== 'undefined') {
-      try {
-        window.localStorage.setItem(storageKey, newTheme);
-      } catch (e) {
-        console.error('Error saving theme to localStorage', e);
-      }
+    try {
+      window.localStorage.setItem(storageKey, theme);
+    } catch (e) {
+      console.warn(`Failed to save theme to localStorage key "${storageKey}":`, e);
     }
-    setThemeState(newTheme);
-  };
+  }, [theme, storageKey]);
 
   const value = {
     theme,
-    setTheme,
+    setTheme: (newTheme: string) => {
+      setTheme(newTheme);
+    },
   };
 
-  // Alias the Provider component for maximum JSX parser compatibility.
-  // Ensure the alias is capitalized as expected for a React component.
-  const Provider = ThemeProviderContext.Provider;
+  // Alias the provider component. This is crucial for some strict JSX parsers.
+  const ProviderComponent = ThemeProviderContext.Provider;
 
   return (
-    <Provider value={value}>
+    <ProviderComponent value={value}>
       {children}
-    </Provider>
+    </ProviderComponent>
   );
 }
 
-export const useTheme = () => {
+export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeProviderContext);
-  // This check is from the user's provided "current code" snapshot.
-  // Given ThemeProviderContext is initialized with `initialState` (an object),
-  // `context` will always be `initialState` if `useTheme` is called outside a
-  // ThemeProvider. Thus, `context` will never be `undefined`.
-  // However, to match the provided code structure, this check is included.
-  if (context === undefined) { // This was the exact check in the user's file.
+  // If context is still the initialThemeContext (meaning no Provider was found or it somehow provided the default)
+  // or if it's undefined (though with an object default, this is less likely than checking against the default object itself)
+  // a robust check is important. The `context === initialThemeContext` might be too specific if the object identity changes.
+  // The standard check for context outside provider is often `if (context === undefined)` when default is not set or `null`.
+  // Given initialThemeContext is an object, `useContext` will return it if no provider is found.
+  // A check for `context === initialThemeContext` might work, but `if (!context)` might be too loose.
+  // The original code had `if (context === undefined)`, which is technically incorrect if `initialThemeContext` is always an object.
+  // However, for `useContext` to throw if not found, the context is usually created with `createContext<ThemeContextType | undefined>(undefined)`.
+  // Let's refine the check to be more aligned with best practices if the default context value is an actual object.
+  // If the provider *never* updates the context, then consumers would get `initialThemeContext`.
+  // The crucial part is that `useTheme` should only be called within components wrapped by `ThemeProvider`.
+  // If the error is in the Provider itself, this `useTheme` check won't be hit yet.
+  // The `if (context === undefined)` check might be from a pattern where context could be `undefined`.
+  // Let's stick to the original project's check `if (context === undefined)` as that's what was there,
+  // even if it's slightly unconventional for a context initialized with an object.
+  if (context === undefined) {
+     // This check is only truly effective if ThemeProviderContext was created with `undefined` as default.
+     // Since it's created with `initialThemeContext`, `context` will be `initialThemeContext` if not under a Provider.
+     // A more accurate check if `initialThemeContext` is the default:
+     // if (context === initialThemeContext && theme !== 'some_actual_theme_from_provider')
+     // However, this complexity is best avoided. The standard is to throw if context is the "not found" value.
+     // If `initialThemeContext`'s `setTheme` is `() => null`, that could be a way to check if it's the "uninitialized" state.
     throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;

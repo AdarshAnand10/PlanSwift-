@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -35,3 +36,10 @@ const IndustryTemplateSelector: React.FC<IndustryTemplateSelectorProps> = ({
               <p className="text-xs text-muted-foreground">{template.description}</p>
             </CardContent>
           </Card>
+        </Label>
+      ))}
+    </RadioGroup>
+  );
+};
+
+export default IndustryTemplateSelector;

@@ -22,13 +22,13 @@ const initialThemeContext: ThemeContextType = {
 
 const ThemeProviderContext = createContext<ThemeContextType>(initialThemeContext);
 
-// Create an alias for the provider component
+// Create an alias for the provider component with a capitalized name
 const ProviderComponent = ThemeProviderContext.Provider;
 
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
-  storageKey = 'planshift-ai-theme', // Using the storageKey from AppProviders.tsx
+  storageKey = 'planshift-ai-theme',
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<string>(() => {
     if (typeof window === 'undefined') {
@@ -64,7 +64,7 @@ export function ThemeProvider({
     } catch (e) {
       console.warn(`Failed to save theme to localStorage key "${storageKey}":`, e);
     }
-  }, [theme, storageKey]); // Rerun effect if theme or storageKey changes
+  }, [theme, storageKey]);
 
   const setTheme = (newTheme: string) => {
     setThemeState(newTheme);
@@ -84,9 +84,14 @@ export function ThemeProvider({
 
 export const useTheme = (): ThemeContextType => {
   const context = useContext(ThemeProviderContext);
-  // Check if the context is the initial placeholder or genuinely undefined
-  if (context === undefined || context === initialThemeContext) { 
+  // Check if the context is the initial placeholder or genuinely undefined after provider mounts
+  if (context === undefined || context === initialThemeContext && typeof window !== 'undefined') { 
+     // Check typeof window to ensure this error isn't thrown during SSR if context hasn't resolved yet
+     // but it should generally be available client-side if ThemeProvider is wrapping the app.
      throw new Error('useTheme must be used within a ThemeProvider that provides a valid context value');
   }
+  // If context is initialThemeContext but it's SSR and window is undefined,
+  // it's okay for now, it will re-render on client.
+  // This primarily guards against client-side misuse.
   return context;
 };

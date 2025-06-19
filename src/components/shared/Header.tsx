@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { FileText } from 'lucide-react';
 import { APP_NAME } from '@/lib/constants';
@@ -18,3 +19,9 @@ const Header = () => {
             Dashboard
           </Link> */}
         </nav>
+      </div>
+    </header>
+  );
+};
+
+export default Header;

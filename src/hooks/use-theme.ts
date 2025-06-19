@@ -84,10 +84,13 @@ export function ThemeProvider({
     setTheme,
   };
 
+  // Alias the Provider component as suggested for stricter JSX parsers
+  const ProviderComponent = ThemeProviderContext.Provider;
+
   return (
-    <ThemeProviderContext.Provider value={value}>
+    <ProviderComponent value={value}>
       {children}
-    </ThemeProviderContext.Provider>
+    </ProviderComponent>
   );
 }
 

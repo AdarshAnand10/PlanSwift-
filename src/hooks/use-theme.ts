@@ -26,7 +26,7 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
-  storageKey = 'ui-theme', 
+  storageKey = 'ui-theme',
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window === 'undefined') {
@@ -72,13 +72,10 @@ export function ThemeProvider({
     setTheme,
   };
 
-  // Alias the Provider component
-  const ContextProvider = ThemeProviderContext.Provider;
-
   return (
-    <ContextProvider value={value}>
+    <ThemeProviderContext.Provider value={value}>
       {children}
-    </ContextProvider>
+    </ThemeProviderContext.Provider>
   );
 }
 

@@ -22,10 +22,13 @@ const initialThemeContext: ThemeContextType = {
 
 const ThemeProviderContext = createContext<ThemeContextType>(initialThemeContext);
 
+// Create an alias for the provider component
+const ProviderComponent = ThemeProviderContext.Provider;
+
 export function ThemeProvider({
   children,
   defaultTheme = 'system',
-  storageKey = 'ui-theme',
+  storageKey = 'planshift-ai-theme', // Using the storageKey from AppProviders.tsx
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<string>(() => {
     if (typeof window === 'undefined') {
@@ -35,7 +38,6 @@ export function ThemeProvider({
       const storedTheme = window.localStorage.getItem(storageKey);
       return storedTheme || defaultTheme;
     } catch (e) {
-      // If localStorage is unavailable or reading fails
       console.warn(`Failed to read theme from localStorage key "${storageKey}":`, e);
       return defaultTheme;
     }
@@ -49,7 +51,8 @@ export function ThemeProvider({
 
     let effectiveTheme = theme;
     if (theme === 'system') {
-      effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      effectiveTheme = systemPrefersDark ? 'dark' : 'light';
     }
     
     // Add the current effective theme class
@@ -71,9 +74,6 @@ export function ThemeProvider({
     theme,
     setTheme,
   };
-
-  // Alias the provider component to ensure JSX compatibility
-  const ProviderComponent = ThemeProviderContext.Provider;
 
   return (
     <ProviderComponent value={value}>

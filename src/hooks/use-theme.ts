@@ -84,14 +84,14 @@ export function ThemeProvider({
     setTheme,
   };
 
-  // Alias the Provider component as it can be more robust for some JSX parsers.
+  // Alias the Provider component for maximum JSX parser compatibility.
   // Ensure the alias is capitalized as expected for a React component.
-  const ProviderComponent = ThemeProviderContext.Provider;
+  const Provider = ThemeProviderContext.Provider;
 
   return (
-    <ProviderComponent value={value}>
+    <Provider value={value}>
       {children}
-    </ProviderComponent>
+    </Provider>
   );
 }
 

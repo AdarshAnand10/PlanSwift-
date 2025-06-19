@@ -72,10 +72,13 @@ export function ThemeProvider({
     setTheme,
   };
 
+  // Alias the Provider component
+  const ContextProvider = ThemeProviderContext.Provider;
+
   return (
-    <ThemeProviderContext.Provider value={value}>
+    <ContextProvider value={value}>
       {children}
-    </ThemeProviderContext.Provider>
+    </ContextProvider>
   );
 }
 

@@ -120,7 +120,7 @@ export default function HomePage() {
             </h2>
             <p className="mx-auto mb-10 max-w-xl text-lg text-foreground/80 sm:text-xl">
               Stop dreaming, start planning. {APP_NAME} makes it fast, easy, and effective.
-            </p>
+            </p>            
             <Link href="/plan/new">
               <Button size="lg" variant="default" className="px-10 py-6 text-lg shadow-lg transition-transform hover:scale-105">
                 Create Your Free Plan

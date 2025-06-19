@@ -1,3 +1,4 @@
+
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import type { PlanSection } from '@/types';
@@ -76,12 +77,17 @@ export function parseMarkdownToSections(markdown: string): PlanSection[] {
 }
 
 // Debounce function
-export function debounce<F extends (...args: any[]) => any>(func: F, waitFor: number) {
-  let timeout: ReturnType<typeof setTimeout> | null = null;
+export function debounce<T extends (...args: any[]) => void>(func: T, delay = 300) {
+  let timeout: NodeJS.Timeout | null = null;
 
-  const debounced = (...args: Parameters<F>) => {
-    if (timeout !== null) {
+  return (...args: Parameters<T>) => {
+    if (timeout) {
       clearTimeout(timeout);
       timeout = null;
     }
-    timeout = setTimeout
+
+    timeout = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+}

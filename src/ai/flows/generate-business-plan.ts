@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -53,7 +54,9 @@ Financial Projections: {{{financialProjections}}}
 Management Team: {{{managementTeam}}}
 Funding Request: {{{fundingRequest}}}
 
-Ensure the business plan is well-structured, clear, and persuasive. Include sections such as executive summary, company description, market analysis, organization and management, service or product line, marketing and sales strategy, funding request, and financial projections.`,
+Ensure the business plan is well-structured, clear, and persuasive. Include sections such as executive summary, company description, market analysis, organization and management, service or product line, marketing and sales strategy, funding request, and financial projections.
+
+Important: Do not use asterisks (*) for formatting, such as for bold text. Use plain text for emphasis if needed or rely on markdown sectioning for structure. The entire output should be suitable for rendering as markdown.`,
 });
 
 const generateBusinessPlanFlow = ai.defineFlow(

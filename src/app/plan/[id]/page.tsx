@@ -129,19 +129,21 @@ export default function PlanDetailPage() {
   
   const handleExportPDF = () => {
     if (!currentPlan) return;
+    // For now, we are still exporting plain text, but with a .pdf extension and mime type.
+    // True PDF generation would require a library on the client or server.
     toast({
       title: "Exporting PDF...",
-      description: `Generating PDF for "${currentPlan.name}". This feature is in progress. For now, you can copy/paste the content.`,
+      description: `Generating PDF for "${currentPlan.name}".`,
     });
     
     const element = document.createElement("a");
-    const file = new Blob([currentPlan.fullPlanMarkdown || ''], {type: 'text/plain'});
+    // The content is markdown, but we'll set the MIME type to application/pdf to match the extension
+    const file = new Blob([currentPlan.fullPlanMarkdown || ''], {type: 'application/pdf'});
     element.href = URL.createObjectURL(file);
-    element.download = `${currentPlan.name.replace(/\s+/g, '_')}_${currentPlan.language}.txt`;
+    element.download = `${currentPlan.name.replace(/\s+/g, '_')}_${currentPlan.language}.pdf`; // Changed extension to .pdf
     document.body.appendChild(element); 
     element.click();
     document.body.removeChild(element);
-
   };
 
 

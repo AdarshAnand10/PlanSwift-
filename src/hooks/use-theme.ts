@@ -84,7 +84,8 @@ export function ThemeProvider({
     setTheme,
   };
 
-  // Alias the Provider component as suggested for stricter JSX parsers
+  // Alias the Provider component as it can be more robust for some JSX parsers.
+  // Ensure the alias is capitalized as expected for a React component.
   const ProviderComponent = ThemeProviderContext.Provider;
 
   return (

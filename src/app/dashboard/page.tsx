@@ -1,7 +1,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Header from '@/components/shared/Header';
 import { Button } from '@/components/ui/button';
@@ -41,6 +41,22 @@ const PlanListCard: React.FC<{ plan: BusinessPlan }> = ({ plan }) => {
 
 const PlansSection: React.FC = () => {
   const [plans] = useLocalStorage<BusinessPlan[]>(LOCAL_STORAGE_PLANS_KEY, []);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    // Render a skeleton loader on the server and initial client render to avoid hydration mismatch
+    return (
+      <div className="space-y-4">
+        <div className="h-24 w-full rounded-lg bg-muted/50 animate-pulse"></div>
+        <div className="h-24 w-full rounded-lg bg-muted/50 animate-pulse"></div>
+        <div className="h-24 w-full rounded-lg bg-muted/50 animate-pulse"></div>
+      </div>
+    );
+  }
 
   if (!plans || plans.length === 0) {
     return (
@@ -68,8 +84,7 @@ const PlansSection: React.FC = () => {
       </div>
     </ScrollArea>
   );
-};
-
+}
 
 export default function DashboardPage() {
   return (

@@ -15,7 +15,7 @@ import type { BusinessPlan } from '@/types';
 import { alterPlanSection } from '@/ai/flows/alter-plan-section';
 import { translateBusinessPlan } from '@/ai/flows/translate-business-plan';
 import { LOCAL_STORAGE_PLANS_KEY, APP_NAME, DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from '@/lib/constants';
-import { ArrowLeft, Lock, Info } from 'lucide-react';
+import { ArrowLeft, Lock, Info, ArrowRightLeft } from 'lucide-react';
 import { parseMarkdownToSections } from '@/lib/utils';
 
 
@@ -204,10 +204,11 @@ export default function PlanDetailPage() {
              </div>
              <Button
                size="sm"
-               variant="link"
-               className="text-accent-foreground hover:text-accent-foreground/80"
+               variant="ghost"
+               className="text-primary hover:bg-primary/10 h-auto px-3 py-1.5 transition-colors"
                onClick={() => setUserPlanStatus(userPlanStatus === 'free' ? 'paid' : 'free')}
              >
+               <ArrowRightLeft className="mr-2 h-4 w-4" />
                Switch to '{userPlanStatus === 'free' ? 'paid' : 'free'}' view
              </Button>
            </div>

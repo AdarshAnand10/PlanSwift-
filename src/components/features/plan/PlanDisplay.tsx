@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -25,8 +24,8 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, isLocked, onSectionUpda
     );
   }
 
-  // Show first 2 sections for free users, otherwise show all
-  const sectionsToShow = isLocked ? plan.sections.slice(0, 2) : plan.sections;
+  // Show first 4 sections for free users, otherwise show all
+  const sectionsToShow = isLocked ? plan.sections.slice(0, 4) : plan.sections;
   const defaultOpenSections = isLocked ? sectionsToShow.map(s => s.id) : plan.sections.map(s => s.id);
 
   return (
@@ -37,7 +36,7 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, isLocked, onSectionUpda
             key={section.id}
             section={section}
             sectionNumber={index + 1}
-            onUpdateContent={(newContent) => onSectionUpdate(section.id, newContent)}
+            onUpdateContent={(newContent) => onUpdateContent(section.id, newContent)}
             onSectionAlter={(command) => onSectionAlter(section.id, command)}
             isAltering={isAlteringSection(section.id)}
             disabled={isLocked}

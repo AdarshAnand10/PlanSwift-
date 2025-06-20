@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FileText, Moon, Sun } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 import { APP_NAME } from '@/lib/constants';
 import { useTheme } from '@/hooks/use-theme';
 import { Button } from '@/components/ui/button';
@@ -11,8 +11,6 @@ const Header = () => {
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
-    // If current theme is system, determine what to toggle to based on actual resolved system theme
-    // Otherwise, just toggle between light and dark
     let currentEffectiveTheme = theme;
     if (theme === 'system' && typeof window !== 'undefined') {
         currentEffectiveTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -28,13 +26,17 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-card/80 backdrop-blur-lg">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2 text-lg font-semibold font-headline text-primary">
-          <FileText className="h-7 w-7 text-accent" />
-          <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            {APP_NAME}
+        <Link href="/" className="flex items-center gap-1 text-2xl font-bold font-headline">
+          <span className="text-primary">Plan</span>
+          <span className="bg-gradient-to-r from-yellow-500 via-red-600 to-red-700 bg-clip-text text-transparent">
+            Insta
           </span>
         </Link>
         <nav className="flex items-center gap-4">
+          {/* Example: Link to dashboard, conditionally render if authenticated in future */}
+          {/* <Link href="/dashboard">
+            <Button variant="ghost">Dashboard</Button>
+          </Link> */}
           <Button
             variant="ghost"
             size="icon"

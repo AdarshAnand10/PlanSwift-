@@ -8,11 +8,13 @@ import type { GenerateBusinessPlanInput } from '@/ai/flows/generate-business-pla
 import PlanGeneratorForm from '@/components/features/plan/PlanGeneratorForm';
 import Header from '@/components/shared/Header';
 import { useToast } from '@/hooks/use-toast';
-import type { BusinessPlan, GeneratePlanFormValues, IndustryTemplate } from '@/types';
+import type { BusinessPlan, GeneratePlanFormValues } from '@/types';
 import { generateUniqueId, parseMarkdownToSections } from '@/lib/utils';
 import { LOCAL_STORAGE_PLANS_KEY, INDUSTRIES, DEFAULT_LANGUAGE, APP_NAME } from '@/lib/constants';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
+import { ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function NewPlanPage() {
   const router = useRouter();
@@ -32,7 +34,7 @@ export default function NewPlanPage() {
       
       const aiInput: GenerateBusinessPlanInput = {
         companyName: data.companyName,
-        industry: selectedTemplate.predefinedInputs.industry || data.industryTemplateId, // Fallback to ID if specific industry name not in template
+        industry: selectedTemplate.predefinedInputs.industry || data.industryTemplateId,
         missionStatement: data.missionStatement,
         valueProposition: data.valueProposition,
         targetMarket: data.targetMarket,
@@ -53,7 +55,7 @@ export default function NewPlanPage() {
           id: newPlanId,
           name: data.planName,
           companyName: data.companyName,
-          industry: selectedTemplate.name, // Store friendly name
+          industry: selectedTemplate.name,
           missionStatement: data.missionStatement,
           valueProposition: data.valueProposition,
           targetMarket: data.targetMarket,
@@ -68,7 +70,7 @@ export default function NewPlanPage() {
           updatedAt: currentDate,
         };
 
-        setPlans([...(plans || []), newBusinessPlan]); // Ensure plans is not null
+        setPlans([...(plans || []), newBusinessPlan]);
         toast({ title: "Success!", description: "Your new business plan has been generated." });
         router.push(`/plan/${newPlanId}`);
       } else {
@@ -91,6 +93,9 @@ export default function NewPlanPage() {
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
+          <Button onClick={() => router.push('/dashboard')} variant="outline" size="sm" className="mb-6">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
+          </Button>
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold font-headline text-primary">{APP_NAME}</h1>
             <p className="mt-2 text-xl text-muted-foreground">Let's craft your new business plan!</p>

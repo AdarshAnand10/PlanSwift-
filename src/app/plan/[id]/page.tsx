@@ -11,7 +11,7 @@ import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import useLocalStorage from '@/hooks/useLocalStorage';
-import type { BusinessPlan, PlanSection } from '@/types';
+import type { BusinessPlan } from '@/types';
 import { alterPlanSection } from '@/ai/flows/alter-plan-section';
 import { translateBusinessPlan } from '@/ai/flows/translate-business-plan';
 import { LOCAL_STORAGE_PLANS_KEY, APP_NAME, DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from '@/lib/constants';
@@ -38,7 +38,7 @@ export default function PlanDetailPage() {
         setCurrentPlan(foundPlan);
       } else {
         toast({ title: "Error", description: "Business plan not found.", variant: "destructive" });
-        // Optionally redirect: router.push('/');
+        // Optionally redirect: router.push('/dashboard');
       }
     }
     setIsLoading(false);
@@ -129,18 +129,15 @@ export default function PlanDetailPage() {
   
   const handleExportPDF = () => {
     if (!currentPlan) return;
-    // For now, we are still exporting plain text, but with a .pdf extension and mime type.
-    // True PDF generation would require a library on the client or server.
     toast({
       title: "Exporting PDF...",
       description: `Generating PDF for "${currentPlan.name}".`,
     });
     
     const element = document.createElement("a");
-    // The content is markdown, but we'll set the MIME type to application/pdf to match the extension
     const file = new Blob([currentPlan.fullPlanMarkdown || ''], {type: 'application/pdf'});
     element.href = URL.createObjectURL(file);
-    element.download = `${currentPlan.name.replace(/\s+/g, '_')}_${currentPlan.language}.pdf`; // Changed extension to .pdf
+    element.download = `${currentPlan.name.replace(/\s+/g, '_')}_${currentPlan.language}.pdf`;
     document.body.appendChild(element); 
     element.click();
     document.body.removeChild(element);
@@ -163,8 +160,8 @@ export default function PlanDetailPage() {
         <main className="flex-grow container mx-auto px-4 py-8 text-center">
           <h1 className="text-2xl font-bold text-destructive mb-4">Plan Not Found</h1>
           <p className="text-muted-foreground mb-6">The business plan you are looking for does not exist or could not be loaded.</p>
-          <Button onClick={() => router.push('/')} variant="outline">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Go to Homepage
+          <Button onClick={() => router.push('/dashboard')} variant="outline">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Go to Dashboard
           </Button>
         </main>
       </div>
@@ -177,8 +174,8 @@ export default function PlanDetailPage() {
       <main className="flex-grow container mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <Button onClick={() => router.push('/')} variant="outline" size="sm" className="mb-4">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Plans (Home)
+            <Button onClick={() => router.push('/dashboard')} variant="outline" size="sm" className="mb-4">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
             </Button>
             <h1 className="text-4xl font-bold font-headline text-primary">{currentPlan.name}</h1>
             <p className="text-lg text-muted-foreground">Company: {currentPlan.companyName}</p>

@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Header from '@/components/shared/Header';
-import { Lightbulb, Zap, Edit3, FileText, Languages, Download, Users, History, ShieldCheck } from 'lucide-react';
+import { Lightbulb, Zap, Edit3, FileText, Languages, Download, Users, History } from 'lucide-react';
 import Image from 'next/image';
 import { APP_NAME } from '@/lib/constants';
 
@@ -36,10 +36,10 @@ export default function HomePage() {
             <Link href="/plan/new">
               <Button size="lg" className="px-10 py-6 text-lg shadow-lg transition-transform hover:scale-105">
                 <Lightbulb className="mr-2 h-5 w-5" />
-                Start Your Plan Now
+                Get Started Now
               </Button>
             </Link>
-            <p className="mt-4 text-xs text-muted-foreground">Free to start. No credit card required.</p>
+            {/* "Free to start" text removed */}
           </div>
         </section>
 
@@ -123,7 +123,7 @@ export default function HomePage() {
             </p>            
             <Link href="/plan/new">
               <Button size="lg" variant="default" className="px-10 py-6 text-lg shadow-lg transition-transform hover:scale-105">
-                Create Your Free Plan
+                Create Your Plan
                 <Zap className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -135,7 +135,7 @@ export default function HomePage() {
       <footer className="border-t bg-card py-8 text-center">
         <div className="container mx-auto px-4">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} {APP_NAME}. A Wytmode product. All rights reserved.
+            &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
           </p>
         </div>
       </footer>

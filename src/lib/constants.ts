@@ -1,6 +1,7 @@
+
 import type { IndustryTemplate } from '@/types';
 
-export const APP_NAME = "PlanSwift AI";
+export const APP_NAME = "PlanInsta"; // Updated App Name
 
 export const INDUSTRIES: IndustryTemplate[] = [
   { 
@@ -78,4 +79,4 @@ export const SUPPORTED_LANGUAGES = [
 
 export const DEFAULT_LANGUAGE = 'en';
 
-export const LOCAL_STORAGE_PLANS_KEY = 'planSwiftAI_plans';
+export const LOCAL_STORAGE_PLANS_KEY = 'planInsta_plans'; // Updated key for new app name

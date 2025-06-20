@@ -14,7 +14,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import SiteFooter from '@/components/shared/Footer';
 
-const PlanListCard: React.FC<{ plan: BusinessPlan }> = ({ plan }) => {
+function PlanListCard({ plan }: { plan: BusinessPlan }) {
   return (
     <Card className="mb-4 hover:shadow-md transition-shadow">
       <CardHeader>
@@ -40,7 +40,7 @@ const PlanListCard: React.FC<{ plan: BusinessPlan }> = ({ plan }) => {
   );
 }
 
-const PlansSection: React.FC = () => {
+function PlansSection() {
   const [plans] = useLocalStorage<BusinessPlan[]>(LOCAL_STORAGE_PLANS_KEY, []);
   const [isMounted, setIsMounted] = useState(false);
 

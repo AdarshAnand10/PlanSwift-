@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npx kill-port 9002 && sleep 2 && next dev --port 9002",
+    "dev": "npx kill-port 9002 && sleep 5 && next dev --port 9002 --hostname 0.0.0.0",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "next build",
@@ -41,6 +41,7 @@
     "dotenv": "^16.5.0",
     "firebase": "^11.9.1",
     "genkit": "^1.8.0",
+    "kill-port": "^2.0.1",
     "lucide-react": "^0.475.0",
     "next": "15.3.3",
     "patch-package": "^8.0.0",
@@ -58,7 +59,6 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "genkit-cli": "^1.8.0",
-    "kill-port": "^2.0.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

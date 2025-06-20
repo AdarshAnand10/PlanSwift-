@@ -12,6 +12,7 @@ import useLocalStorage from '@/hooks/useLocalStorage';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
+import SiteFooter from '@/components/shared/Footer';
 
 const PlanListCard: React.FC<{ plan: BusinessPlan }> = ({ plan }) => {
   return (
@@ -225,11 +226,7 @@ export default function DashboardPage() {
           </div>
         </div>
       </main>
-      <footer className="border-t bg-card py-6 text-center mt-auto">
-        <p className="text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
-        </p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

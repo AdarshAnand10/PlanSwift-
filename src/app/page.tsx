@@ -5,6 +5,7 @@ import Header from '@/components/shared/Header';
 import { Lightbulb, Zap, Edit3, FileText, Languages, Download, Users, History } from 'lucide-react';
 import Image from 'next/image';
 import { APP_NAME } from '@/lib/constants';
+import SiteFooter from '@/components/shared/Footer';
 
 const FeatureCard = ({ icon: Icon, title, description }: { icon: React.ElementType, title: string, description: string }) => (
   <div className="flex flex-col items-center p-6 text-center bg-card rounded-xl shadow-lg transition-all hover:shadow-xl hover:scale-105">
@@ -130,15 +131,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t bg-card py-8 text-center">
-        <div className="container mx-auto px-4">
-          <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

@@ -17,6 +17,7 @@ import { translateBusinessPlan } from '@/ai/flows/translate-business-plan';
 import { LOCAL_STORAGE_PLANS_KEY, APP_NAME, DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from '@/lib/constants';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { parseMarkdownToSections } from '@/lib/utils';
+import SiteFooter from '@/components/shared/Footer';
 
 
 export default function PlanDetailPage() {
@@ -237,11 +238,7 @@ export default function PlanDetailPage() {
           />
         </div>
       </main>
-      <footer className="border-t bg-card py-6 text-center mt-auto">
-        <p className="text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
-        </p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

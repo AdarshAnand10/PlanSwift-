@@ -15,6 +15,7 @@ import useLocalStorage from '@/hooks/useLocalStorage';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import SiteFooter from '@/components/shared/Footer';
 
 export default function NewPlanPage() {
   const router = useRouter();
@@ -111,11 +112,7 @@ export default function NewPlanPage() {
           <PlanGeneratorForm onSubmit={handleSubmit} isLoading={isLoading} />
         </div>
       </main>
-      <footer className="border-t bg-card py-6 text-center mt-auto">
-        <p className="text-sm text-muted-foreground">
-          &copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.
-        </p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

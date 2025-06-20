@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -7,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Edit3, Save, Bot, MessageSquare, XCircle, Loader2 } from 'lucide-react';
 import { AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import AlterSectionDialog from './AlterSectionDialog'; // Will create this next
+import AlterSectionDialog from './AlterSectionDialog';
 
 interface PlanSectionCardProps {
   section: PlanSection;
@@ -15,14 +16,16 @@ interface PlanSectionCardProps {
   onUpdateContent: (newContent: string) => void;
   onAlterSection: (command: string) => Promise<void>;
   isAltering: boolean;
+  disabled?: boolean;
 }
 
-const PlanSectionCard: React.FC<PlanSectionCardProps> = ({ section, sectionNumber, onUpdateContent, onAlterSection, isAltering }) => {
+const PlanSectionCard: React.FC<PlanSectionCardProps> = ({ section, sectionNumber, onUpdateContent, onAlterSection, isAltering, disabled = false }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editableContent, setEditableContent] = useState(section.content);
   const [isAlterDialogOpen, setIsAlterDialogOpen] = useState(false);
 
   const handleSave = () => {
+    if (disabled) return;
     onUpdateContent(editableContent);
     setIsEditing(false);
   };
@@ -55,6 +58,7 @@ const PlanSectionCard: React.FC<PlanSectionCardProps> = ({ section, sectionNumbe
               rows={10}
               className="w-full border-input-border rounded-md p-2 focus:ring-primary focus:border-primary"
               aria-label={`Edit content for section ${section.title}`}
+              disabled={disabled}
             />
           ) : (
             <div className="whitespace-pre-wrap break-words rounded-md p-2 min-h-[100px]" dangerouslySetInnerHTML={{ __html: section.content.replace(/\n/g, '<br />') }} />
@@ -64,19 +68,19 @@ const PlanSectionCard: React.FC<PlanSectionCardProps> = ({ section, sectionNumbe
         <div className="mt-4 flex flex-wrap gap-2 items-center justify-end">
           {isEditing ? (
             <>
-              <Button onClick={handleSave} size="sm" variant="default">
+              <Button onClick={handleSave} size="sm" variant="default" disabled={disabled}>
                 <Save className="mr-2 h-4 w-4" /> Save Changes
               </Button>
-              <Button onClick={handleCancel} size="sm" variant="outline">
+              <Button onClick={handleCancel} size="sm" variant="outline" disabled={disabled}>
                 <XCircle className="mr-2 h-4 w-4" /> Cancel
               </Button>
             </>
           ) : (
-            <Button onClick={() => setIsEditing(true)} size="sm" variant="outline">
+            <Button onClick={() => setIsEditing(true)} size="sm" variant="outline" disabled={disabled}>
               <Edit3 className="mr-2 h-4 w-4" /> Edit Manually
             </Button>
           )}
-          <Button onClick={() => setIsAlterDialogOpen(true)} size="sm" variant="secondary" disabled={isAltering || isEditing}>
+          <Button onClick={() => setIsAlterDialogOpen(true)} size="sm" variant="secondary" disabled={disabled || isAltering || isEditing}>
             {isAltering ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Bot className="mr-2 h-4 w-4" />}
             {isAltering ? 'Altering...' : 'Alter with AI'}
           </Button>

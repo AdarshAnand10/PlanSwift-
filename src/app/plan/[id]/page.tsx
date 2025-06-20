@@ -15,7 +15,7 @@ import type { BusinessPlan } from '@/types';
 import { alterPlanSection } from '@/ai/flows/alter-plan-section';
 import { translateBusinessPlan } from '@/ai/flows/translate-business-plan';
 import { LOCAL_STORAGE_PLANS_KEY, APP_NAME, DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from '@/lib/constants';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Lock } from 'lucide-react';
 import { parseMarkdownToSections } from '@/lib/utils';
 
 
@@ -30,6 +30,11 @@ export default function PlanDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isTranslating, setIsTranslating] = useState(false);
   const [alteringSectionId, setAlteringSectionId] = useState<string | null>(null);
+  
+  // Simulate user's plan status. Default to 'free' to show the locked state.
+  // In a real app, this would come from user authentication context.
+  const [userPlanStatus, setUserPlanStatus] = useState<'free' | 'paid'>('free');
+  const isLocked = userPlanStatus === 'free';
 
   useEffect(() => {
     if (planId && plans) {
@@ -51,6 +56,10 @@ export default function PlanDetailPage() {
   }, [plans, setPlans]);
 
   const handleSectionUpdate = useCallback((sectionId: string, newContent: string) => {
+    if (isLocked) {
+      toast({ title: "Upgrade to Edit", description: "You need to upgrade to a paid plan to save changes.", variant: "destructive" });
+      return;
+    }
     if (currentPlan) {
       const updatedSections = currentPlan.sections.map(sec =>
         sec.id === sectionId ? { ...sec, content: newContent } : sec
@@ -60,9 +69,13 @@ export default function PlanDetailPage() {
       updatePlanInStorage(updatedPlan);
       toast({ title: "Section Saved", description: `${currentPlan.sections.find(s => s.id === sectionId)?.title} has been updated.` });
     }
-  }, [currentPlan, updatePlanInStorage, toast]);
+  }, [currentPlan, updatePlanInStorage, toast, isLocked]);
 
   const handleAlterSection = async (sectionId: string, command: string) => {
+    if (isLocked) {
+      toast({ title: "Upgrade to Use AI", description: "You need to upgrade to a paid plan to use AI editing.", variant: "destructive" });
+      return;
+    }
     if (!currentPlan) return;
     const sectionToAlter = currentPlan.sections.find(s => s.id === sectionId);
     if (!sectionToAlter) return;
@@ -92,6 +105,10 @@ export default function PlanDetailPage() {
   };
 
   const handleLanguageChange = async (newLanguage: string) => {
+    if (isLocked) {
+      toast({ title: "Upgrade to Translate", description: "You need to upgrade to a paid plan to translate your plan.", variant: "destructive" });
+      return;
+    }
     if (!currentPlan || !currentPlan.fullPlanMarkdown) return;
     if (currentPlan.language === newLanguage) return;
 
@@ -128,6 +145,10 @@ export default function PlanDetailPage() {
   };
   
   const handleExportPDF = () => {
+    if (isLocked) {
+        toast({ title: "Upgrade to Export", description: "You need to upgrade to a paid plan to export as PDF.", variant: "destructive" });
+        return;
+    }
     if (!currentPlan) return;
     toast({
       title: "Exporting PDF...",
@@ -173,11 +194,28 @@ export default function PlanDetailPage() {
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
+           {/* Demo toggle to switch between free/paid views */}
+           <div className="mb-4 p-3 rounded-lg bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-300 dark:border-yellow-700 text-center">
+             <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+               DEMO ONLY: You are currently on the '{userPlanStatus}' plan.
+             </p>
+             <Button
+               size="sm"
+               variant="link"
+               onClick={() => setUserPlanStatus(userPlanStatus === 'free' ? 'paid' : 'free')}
+             >
+               Switch to '{userPlanStatus === 'free' ? 'paid' : 'free'}' view
+             </Button>
+           </div>
+           
           <div className="mb-8">
             <Button onClick={() => router.push('/dashboard')} variant="outline" size="sm" className="mb-4">
               <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
             </Button>
-            <h1 className="text-4xl font-bold font-headline text-primary">{currentPlan.name}</h1>
+            <h1 className="text-4xl font-bold font-headline text-primary flex items-center gap-2">
+              {currentPlan.name}
+              {isLocked && <Lock className="w-7 h-7 text-accent" />}
+            </h1>
             <p className="text-lg text-muted-foreground">Company: {currentPlan.companyName}</p>
             <p className="text-sm text-muted-foreground">Industry: {currentPlan.industry} | Last Updated: {new Date(currentPlan.updatedAt).toLocaleDateString()}</p>
           </div>
@@ -186,12 +224,12 @@ export default function PlanDetailPage() {
             <LanguageSelector
               currentLanguage={currentPlan.language || DEFAULT_LANGUAGE}
               onLanguageChange={handleLanguageChange}
-              disabled={isTranslating || !!alteringSectionId}
+              disabled={isTranslating || !!alteringSectionId || isLocked}
             />
             <ExportButtons
               planName={currentPlan.name}
               onExportPDF={handleExportPDF}
-              disabled={isTranslating || !!alteringSectionId}
+              disabled={isTranslating || !!alteringSectionId || isLocked}
             />
           </div>
 
@@ -204,6 +242,7 @@ export default function PlanDetailPage() {
 
           <PlanDisplay
             plan={currentPlan}
+            isLocked={isLocked}
             onSectionUpdate={handleSectionUpdate}
             onSectionAlter={handleAlterSection}
             isAlteringSection={(sectionId) => alteringSectionId === sectionId}

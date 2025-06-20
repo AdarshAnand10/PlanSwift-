@@ -1,91 +1,14 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import Header from '@/components/shared/Header';
 import { Button } from '@/components/ui/button';
-import { PlusCircle, Briefcase, UserCircle, ShoppingCart, FileText, CheckCircle2 } from 'lucide-react';
-import { APP_NAME, LOCAL_STORAGE_PLANS_KEY } from '@/lib/constants';
-import type { BusinessPlan } from '@/types';
-import useLocalStorage from '@/hooks/useLocalStorage';
+import { PlusCircle, Briefcase, UserCircle, ShoppingCart, CheckCircle2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
 import SiteFooter from '@/components/shared/Footer';
-
-function PlanListCard({ plan }: { plan: BusinessPlan }) {
-  return (
-    <Card className="mb-4 hover:shadow-md transition-shadow">
-      <CardHeader>
-        <CardTitle className="font-headline text-xl text-primary">{plan.name}</CardTitle>
-        <CardDescription className="text-sm text-muted-foreground">
-          Company: {plan.companyName} | Industry: {plan.industry}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-xs text-muted-foreground">
-          Last updated: {new Date(plan.updatedAt).toLocaleDateString()}
-        </p>
-      </CardContent>
-      <CardFooter>
-        <Link href={`/plan/${plan.id}`} passHref>
-          <Button variant="outline" size="sm">
-            <FileText className="mr-2 h-4 w-4" />
-            View Plan
-          </Button>
-        </Link>
-      </CardFooter>
-    </Card>
-  );
-}
-
-function PlansSection() {
-  const [plans] = useLocalStorage<BusinessPlan[]>(LOCAL_STORAGE_PLANS_KEY, []);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    // Render a skeleton loader on the server and initial client render to avoid hydration mismatch
-    return (
-      <div className="space-y-4">
-        <div className="h-24 w-full rounded-lg bg-muted/50 animate-pulse"></div>
-        <div className="h-24 w-full rounded-lg bg-muted/50 animate-pulse"></div>
-        <div className="h-24 w-full rounded-lg bg-muted/50 animate-pulse"></div>
-      </div>
-    );
-  }
-
-  if (!plans || plans.length === 0) {
-    return (
-      <div className="text-center py-10 border border-dashed border-border rounded-lg">
-        <Briefcase className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-        <h3 className="text-xl font-semibold text-muted-foreground mb-2">No Business Plans Yet</h3>
-        <p className="text-sm text-muted-foreground mb-4">Get started by creating your first business plan.</p>
-        <Link href="/plan/new" passHref>
-          <Button>
-            <PlusCircle className="mr-2 h-4 w-4" /> Create New Plan
-          </Button>
-        </Link>
-      </div>
-    );
-  }
-
-  const sortedPlans = [...plans].sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
-
-  return (
-    <ScrollArea className="h-[400px] pr-4">
-      <div className="space-y-4">
-        {sortedPlans.map((plan) => (
-          <PlanListCard key={plan.id} plan={plan} />
-        ))}
-      </div>
-    </ScrollArea>
-  );
-}
+import PlansSection from '@/components/features/dashboard/PlansSection';
 
 export default function DashboardPage() {
   return (
@@ -118,7 +41,7 @@ export default function DashboardPage() {
                   Your Business Plans
                 </CardTitle>
                 <CardDescription>
-                  Access and manage your business plans. Plans listed here are view-only from this dashboard.
+                  Access and manage your business plans. Click 'View Plan' to see details.
                 </CardDescription>
               </CardHeader>
               <CardContent>

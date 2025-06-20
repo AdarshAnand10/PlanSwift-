@@ -142,7 +142,10 @@ export default function DashboardPage() {
                 {/* Starter Plan Card */}
                 <Card>
                   <CardHeader className="pb-4">
-                    <CardTitle className="font-headline text-xl text-primary">Starter</CardTitle>
+                    <div className="flex justify-between items-baseline">
+                      <CardTitle className="font-headline text-xl text-primary">Starter</CardTitle>
+                      <p className="text-2xl font-bold text-foreground">₹2999</p>
+                    </div>
                   </CardHeader>
                   <CardContent className="space-y-3 text-sm">
                     <ul className="space-y-2 text-muted-foreground">
@@ -170,7 +173,10 @@ export default function DashboardPage() {
                 {/* Professional Plan Card */}
                 <Card className="border-accent ring-2 ring-accent/50 shadow-lg">
                   <CardHeader className="pb-4">
-                    <CardTitle className="font-headline text-xl text-accent">Professional</CardTitle>
+                    <div className="flex justify-between items-baseline">
+                      <CardTitle className="font-headline text-xl text-accent">Professional</CardTitle>
+                      <p className="text-2xl font-bold text-accent">₹3999</p>
+                    </div>
                   </CardHeader>
                   <CardContent className="space-y-3 text-sm">
                     <ul className="space-y-2 text-muted-foreground">
@@ -210,7 +216,7 @@ export default function DashboardPage() {
                  <CardDescription>
                   Manage your account details and preferences.
                 </CardDescription>
-              </Header>
+              </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">Account settings functionality will be available here.</p>
                  {/* Add account links/buttons here later */}

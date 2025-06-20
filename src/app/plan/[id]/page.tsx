@@ -15,7 +15,7 @@ import type { BusinessPlan } from '@/types';
 import { alterPlanSection } from '@/ai/flows/alter-plan-section';
 import { translateBusinessPlan } from '@/ai/flows/translate-business-plan';
 import { LOCAL_STORAGE_PLANS_KEY, APP_NAME, DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from '@/lib/constants';
-import { ArrowLeft, Lock } from 'lucide-react';
+import { ArrowLeft, Lock, Info } from 'lucide-react';
 import { parseMarkdownToSections } from '@/lib/utils';
 
 
@@ -195,13 +195,17 @@ export default function PlanDetailPage() {
       <main className="flex-grow container mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
            {/* Demo toggle to switch between free/paid views */}
-           <div className="mb-4 p-3 rounded-lg bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-300 dark:border-yellow-700 text-center">
-             <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-               DEMO ONLY: You are currently on the '{userPlanStatus}' plan.
-             </p>
+           <div className="mb-6 p-4 rounded-lg bg-secondary border border-primary/20 flex flex-col items-center text-center shadow-sm">
+             <div className="flex items-center gap-2 mb-2">
+                <Info className="h-5 w-5 text-primary" />
+                <p className="font-semibold text-primary">
+                  DEMO ONLY: You are currently on the '{userPlanStatus}' plan.
+                </p>
+             </div>
              <Button
                size="sm"
                variant="link"
+               className="text-accent-foreground hover:text-accent-foreground/80"
                onClick={() => setUserPlanStatus(userPlanStatus === 'free' ? 'paid' : 'free')}
              >
                Switch to '{userPlanStatus === 'free' ? 'paid' : 'free'}' view
@@ -218,6 +222,7 @@ export default function PlanDetailPage() {
             </h1>
             <p className="text-lg text-muted-foreground">Company: {currentPlan.companyName}</p>
             <p className="text-sm text-muted-foreground">Industry: {currentPlan.industry} | Last Updated: {new Date(currentPlan.updatedAt).toLocaleDateString()}</p>
+
           </div>
 
           <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-4 border border-input-border rounded-lg bg-card shadow">

@@ -115,7 +115,7 @@ export default function HomePage() {
         {/* Call to Action Section */}
         <section className="py-20 md:py-32 bg-background">
           <div className="container mx-auto px-4 text-center">
-             <Image src="https://placehold.co/800x400.png" data-ai-hint="business plan" alt="AI Business Plan Generation Graphic" width={800} height={400} className="mx-auto mb-8 rounded-lg shadow-2xl" />
+             <Image src="https://storage.googleapis.com/project-ai-codemod-prod.appspot.com/projects%2Fclwye7o65000108l756z65s5a%2Ffiles%2F17a4773d-685b-4ec5-b6d8-7e3e70d4c8fa" alt="PlanInsta App Icon" width={128} height={128} className="mx-auto mb-8" />
             <h2 className="mb-6 text-4xl font-bold tracking-tight font-headline sm:text-5xl">
               Ready to Bring Your Vision to Life?
             </h2>

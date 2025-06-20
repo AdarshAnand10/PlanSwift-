@@ -15,7 +15,7 @@ import type { BusinessPlan } from '@/types';
 import { alterPlanSection } from '@/ai/flows/alter-plan-section';
 import { translateBusinessPlan } from '@/ai/flows/translate-business-plan';
 import { LOCAL_STORAGE_PLANS_KEY, APP_NAME, DEFAULT_LANGUAGE, SUPPORTED_LANGUAGES } from '@/lib/constants';
-import { ArrowLeft, Lock, Info, ArrowRightLeft } from 'lucide-react';
+import { ArrowLeft, Lock } from 'lucide-react';
 import { parseMarkdownToSections } from '@/lib/utils';
 
 
@@ -31,9 +31,9 @@ export default function PlanDetailPage() {
   const [isTranslating, setIsTranslating] = useState(false);
   const [alteringSectionId, setAlteringSectionId] = useState<string | null>(null);
   
-  // Simulate user's plan status. Default to 'free' to show the locked state.
-  // In a real app, this would come from user authentication context.
-  const [userPlanStatus, setUserPlanStatus] = useState<'free' | 'paid'>('free');
+  // Simulate user's plan status. For this demo, we'll keep it locked to 'free'
+  // to demonstrate the locked features. In a real app, this would come from user auth.
+  const userPlanStatus: 'free' | 'paid' = 'free';
   const isLocked = userPlanStatus === 'free';
 
   useEffect(() => {
@@ -194,24 +194,6 @@ export default function PlanDetailPage() {
       <Header />
       <main className="flex-grow container mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-           {/* Demo toggle to switch between free/paid views */}
-           <div className="mb-6 p-4 rounded-lg bg-secondary border border-primary/20 flex flex-col items-center text-center shadow-sm">
-             <div className="flex items-center gap-2 mb-2">
-                <Info className="h-5 w-5 text-primary" />
-                <p className="font-semibold text-primary">
-                  DEMO ONLY: You are currently on the '{userPlanStatus}' plan.
-                </p>
-             </div>
-             <Button
-               size="sm"
-               variant="ghost"
-               className="text-primary hover:bg-primary/10 h-auto px-3 py-1.5 transition-colors"
-               onClick={() => setUserPlanStatus(userPlanStatus === 'free' ? 'paid' : 'free')}
-             >
-               <ArrowRightLeft className="mr-2 h-4 w-4" />
-               Switch to '{userPlanStatus === 'free' ? 'paid' : 'free'}' view
-             </Button>
-           </div>
            
           <div className="mb-8">
             <Button onClick={() => router.push('/dashboard')} variant="outline" size="sm" className="mb-4">

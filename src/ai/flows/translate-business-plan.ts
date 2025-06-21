@@ -47,11 +47,6 @@ const translateBusinessPlanFlow = ai.defineFlow(
     outputSchema: TranslateBusinessPlanOutputSchema,
   },
   async input => {
-    if (!process.env.GOOGLE_API_KEY) {
-      throw new Error(
-        'The GOOGLE_API_KEY environment variable is not set on the server. AI features are disabled.'
-      );
-    }
     const {output} = await translateBusinessPlanPrompt(input);
     if (!output?.translatedPlan) {
       throw new Error('The AI model did not return a valid translation. Please try again.');

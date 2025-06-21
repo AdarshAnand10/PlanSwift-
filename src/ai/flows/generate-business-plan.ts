@@ -66,11 +66,6 @@ const generateBusinessPlanFlow = ai.defineFlow(
     outputSchema: GenerateBusinessPlanOutputSchema,
   },
   async input => {
-    if (!process.env.GOOGLE_API_KEY) {
-      throw new Error(
-        'The GOOGLE_API_KEY environment variable is not set on the server. AI features are disabled.'
-      );
-    }
     const {output} = await prompt(input);
     if (!output?.businessPlan) {
       throw new Error('The AI model did not return a valid business plan. Please try again.');

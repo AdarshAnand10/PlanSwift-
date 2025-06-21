@@ -55,11 +55,6 @@ const alterPlanSectionFlow = ai.defineFlow(
     outputSchema: AlterPlanSectionOutputSchema,
   },
   async input => {
-    if (!process.env.GOOGLE_API_KEY) {
-      throw new Error(
-        'The GOOGLE_API_KEY environment variable is not set on the server. AI features are disabled.'
-      );
-    }
     const {output} = await prompt(input);
     if (!output?.modifiedPlanSection) {
       throw new Error('The AI model did not return a valid response. Please try again.');

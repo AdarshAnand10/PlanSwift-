@@ -36,7 +36,7 @@ const PlanDisplay: React.FC<PlanDisplayProps> = ({ plan, isLocked, onSectionUpda
             key={section.id}
             section={section}
             sectionNumber={index + 1}
-            onUpdateContent={(newContent) => onUpdateContent(section.id, newContent)}
+            onUpdateContent={(newContent) => onSectionUpdate(section.id, newContent)}
             onSectionAlter={(command) => onSectionAlter(section.id, command)}
             isAltering={isAlteringSection(section.id)}
             disabled={isLocked}
